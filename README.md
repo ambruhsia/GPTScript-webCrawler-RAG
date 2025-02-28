@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 ## Setup
 
-### Environment Variables 
+### Set up .env 
 
 ### Database Configuration
 Run the SQL script to create the required tables:
@@ -43,22 +43,9 @@ Run the SQL script to create the required tables:
 2. Paste and execute the contents of `site_pages.sql`.
 3. This will:
    - Create necessary tables.
-   - Enable **vector similarity search**.
-   - Apply row-level security (RLS) policies.
+   - Enable **vector similarity search**. 
 
-#### Table Schema:
-```sql
-CREATE TABLE site_pages (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    url TEXT,
-    chunk_number INTEGER,
-    title TEXT,
-    summary TEXT,
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(1536)
-);
-```
+ 
 
 ---
 
@@ -78,16 +65,8 @@ To launch the interactive UI:
 ```sh
 streamlit run streamlit_ui.py
 ```
-- The interface will be available at [http://localhost:8501](http://localhost:8501).
+![Screenshot 2025-03-01 032615](https://github.com/user-attachments/assets/02854c85-cafc-462e-b4d0-be6141e3be1a)
 
----
-
-## Project Structure
-- **`crawl_gptscript_docs.py`** → Documentation crawler and processor.
-- **`gptscript_expert.py`** → RAG agent implementation.
-- **`streamlit_ui.py`** → Interactive UI for querying.
-- **`site_pages.sql`** → Supabase database setup commands.
-- **`requirements.txt`** → Project dependencies.
 
 ---
 
