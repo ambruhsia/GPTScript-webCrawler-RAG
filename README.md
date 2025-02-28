@@ -22,11 +22,7 @@ An advanced documentation crawler and RAG agent powered by Pydantic AI and Supab
 
 ## Installation
 
-Clone the repository:
-```sh
-git clone https://github.com/coleam00/ottomator-agents.git
-cd ottomator-agents/crawl4AI-agent
-```
+Clone the repository 
 
 Create a virtual environment and install dependencies:
 ```sh
@@ -39,14 +35,7 @@ pip install -r requirements.txt
 
 ## Setup
 
-### Environment Variables
-Rename `.env.example` to `.env` and update the following variables:
-```sh
-OPENAI_API_KEY=your_openai_api_key
-SUPABASE_URL=your_supabase_url
-SUPABASE_SERVICE_KEY=your_supabase_service_key
-LLM_MODEL=gpt-4o-mini  # or your preferred OpenAI model
-```
+### Environment Variables 
 
 ### Database Configuration
 Run the SQL script to create the required tables:
