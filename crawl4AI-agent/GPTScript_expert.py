@@ -21,13 +21,13 @@ model = OpenAIModel(llm)
 logfire.configure(send_to_logfire='if-token-present')
 
 @dataclass
-class PydanticAIDeps:
+class GPTScriptDeps:
     supabase: Client
     openai_client: AsyncOpenAI
 
 system_prompt = """
-You are an expert at Pydantic AI - a Python AI agent framework that you have access to all the documentation to,
-including examples, an API reference, and other resources to help you build Pydantic AI agents.
+You are an expert at GPTScript - a Python AI agent framework that you have access to all the documentation to,
+including examples, an API reference, and other resources to help you build GPTScript agents.
 
 Your only job is to assist with this and you don't answer other questions besides describing what you are able to do.
 
@@ -39,15 +39,14 @@ Then also always check the list of available documentation pages and retrieve th
 Always let the user know when you didn't find the answer in the documentation or the right URL - be honest.
 """
 
-pydantic_ai_expert = Agent(
+gptscript_expert = Agent(
     model,
     system_prompt=system_prompt,
-    deps_type=PydanticAIDeps,
+    deps_type=GPTScriptDeps,
     retries=2
 )
 
 async def get_embedding(text: str, openai_client: AsyncOpenAI) -> List[float]:
-    """Get embedding vector from OpenAI."""
     try:
         response = await openai_client.embeddings.create(
             model="text-embedding-3-small",
@@ -58,18 +57,8 @@ async def get_embedding(text: str, openai_client: AsyncOpenAI) -> List[float]:
         print(f"Error getting embedding: {e}")
         return [0] * 1536  # Return zero vector on error
 
-@pydantic_ai_expert.tool
-async def retrieve_relevant_documentation(ctx: RunContext[PydanticAIDeps], user_query: str) -> str:
-    """
-    Retrieve relevant documentation chunks based on the query with RAG.
-    
-    Args:
-        ctx: The context including the Supabase client and OpenAI client
-        user_query: The user's question or query
-        
-    Returns:
-        A formatted string containing the top 5 most relevant documentation chunks
-    """
+@gptscript_expert.tool
+async def retrieve_relevant_documentation(ctx: RunContext[GPTScriptDeps], user_query: str) -> str:
     try:
         # Get the embedding for the query
         query_embedding = await get_embedding(user_query, ctx.deps.openai_client)
@@ -80,7 +69,7 @@ async def retrieve_relevant_documentation(ctx: RunContext[PydanticAIDeps], user_
             {
                 'query_embedding': query_embedding,
                 'match_count': 5,
-                'filter': {'source': 'pydantic_ai_docs'}
+                'filter': {'source': 'gptscript_docs'}
             }
         ).execute()
         
@@ -104,19 +93,13 @@ async def retrieve_relevant_documentation(ctx: RunContext[PydanticAIDeps], user_
         print(f"Error retrieving documentation: {e}")
         return f"Error retrieving documentation: {str(e)}"
 
-@pydantic_ai_expert.tool
-async def list_documentation_pages(ctx: RunContext[PydanticAIDeps]) -> List[str]:
-    """
-    Retrieve a list of all available Pydantic AI documentation pages.
-    
-    Returns:
-        List[str]: List of unique URLs for all documentation pages
-    """
+@gptscript_expert.tool
+async def list_documentation_pages(ctx: RunContext[GPTScriptDeps]) -> List[str]:
     try:
-        # Query Supabase for unique URLs where source is pydantic_ai_docs
+        # Query Supabase for unique URLs where source is gptscript_docs
         result = ctx.deps.supabase.from_('site_pages') \
             .select('url') \
-            .eq('metadata->>source', 'pydantic_ai_docs') \
+            .eq('metadata->>source', 'gptscript_docs') \
             .execute()
         
         if not result.data:
@@ -130,24 +113,14 @@ async def list_documentation_pages(ctx: RunContext[PydanticAIDeps]) -> List[str]
         print(f"Error retrieving documentation pages: {e}")
         return []
 
-@pydantic_ai_expert.tool
-async def get_page_content(ctx: RunContext[PydanticAIDeps], url: str) -> str:
-    """
-    Retrieve the full content of a specific documentation page by combining all its chunks.
-    
-    Args:
-        ctx: The context including the Supabase client
-        url: The URL of the page to retrieve
-        
-    Returns:
-        str: The complete page content with all chunks combined in order
-    """
+@gptscript_expert.tool
+async def get_page_content(ctx: RunContext[GPTScriptDeps], url: str) -> str:
     try:
         # Query Supabase for all chunks of this URL, ordered by chunk_number
         result = ctx.deps.supabase.from_('site_pages') \
             .select('title, content, chunk_number') \
             .eq('url', url) \
-            .eq('metadata->>source', 'pydantic_ai_docs') \
+            .eq('metadata->>source', 'gptscript_docs') \
             .order('chunk_number') \
             .execute()
         
