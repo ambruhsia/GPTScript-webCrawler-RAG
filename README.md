@@ -1,6 +1,6 @@
 # GPTScript Documentation Crawler & RAG Agent
 
-An intelligent **documentation crawler** and **RAG (Retrieval-Augmented Generation) agent** built using **GPTScript**, **Supabase**, and **OpenAI embeddings**. This tool allows users to crawl documentation websites, store content in a **vector database**, and retrieve relevant documentation chunks for intelligent query answering.
+An intelligent **documentation crawler** and **RAG (Retrieval-Augmented Generation) agent** built using **Pydantic AI**, **Supabase**, and **OpenAI embeddings**. This tool allows users to crawl documentation websites, store content in a **vector database**, and retrieve relevant documentation chunks for intelligent query answering.
 
 ## Features
 - 🚀 **Automated Documentation Crawling**: Fetches and chunks documentation content.
