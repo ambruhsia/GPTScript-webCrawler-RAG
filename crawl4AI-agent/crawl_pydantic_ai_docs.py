@@ -212,9 +212,9 @@ async def crawl_parallel(urls: List[str], max_concurrent: int = 5):
     finally:
         await crawler.close()
 
-def get_pydantic_ai_docs_urls() -> List[str]:
+def get_GptScript_docs_urls() -> List[str]:
     """Get URLs from Pydantic AI docs sitemap."""
-    sitemap_url = "https://ai.pydantic.dev/sitemap.xml"
+    sitemap_url = "https://docs.gptscript.ai/sitemap.xml"
     try:
         response = requests.get(sitemap_url)
         response.raise_for_status()
@@ -233,7 +233,7 @@ def get_pydantic_ai_docs_urls() -> List[str]:
 
 async def main():
     # Get URLs from Pydantic AI docs
-    urls = get_pydantic_ai_docs_urls()
+    urls = get_GptScript_docs_urls()
     if not urls:
         print("No URLs found to crawl")
         return
