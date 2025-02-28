@@ -106,7 +106,3 @@ streamlit run streamlit_ui.py
 This project is adapted from **[ottomator-agents](https://github.com/coleam00/ottomator-agents/tree/main/crawl4AI-agent)**. A huge thanks to the original developers for their contributions to the documentation crawling and RAG agent framework.
 
 ---
-
-## License
-This project is open-source and licensed under the **MIT License**. See the `LICENSE` file for details.
-
